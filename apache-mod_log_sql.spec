@@ -15,7 +15,10 @@ Patch0:		mod_%{mod_name}-acam_libexecdir.patch
 URL:		http://www.outoforder.cc/projects/apache/mod_log_sql/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.40
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libdbi-devel >= 0.7.0
+BuildRequires:	libtool
 BuildRequires:	mysql-devel >= 3.23.30
 Requires(post,preun):	%{apxs}
 Requires(post,preun):	grep
