@@ -12,6 +12,7 @@ Group:		Networking/Daemons
 Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.gz
 # Source0-md5:	e246a3d8e96d2d62715eb34f75c7c11d
 Patch0:		mod_%{mod_name}-acam_libexecdir.patch
+Patch1:		mod_%{mod_name}-subdirs.patch
 URL:		http://www.outoforder.cc/projects/apache/mod_log_sql/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.40
@@ -27,8 +28,8 @@ Requires(preun):	fileutils
 Requires:	apache
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	%(%{apxs} -q SYSCONFDIR)
-%define		_pkglibdir	%(%{apxs} -q LIBEXECDIR)
+%define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
+%define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)
 
 %description
 mod_log_sql is a logging module for Apache 1.3 and 2.0 which logs all requests
@@ -41,6 +42,9 @@ logowanie wszystkich zapytañ do bazy danych.
 %prep
 %setup -q -n mod_%{mod_name}-%{version}
 %patch0 -p0
+%patch1 -p1
+
+rm -f docs/{Makefile*,*.xml} contrib/Makefile*
 
 %build
 %{__perl} -pi -e "s:apr-config:apr-1-config:g" aclocal.m4
@@ -58,8 +62,6 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_pkglibdir}}
 
 install .libs/*.so $RPM_BUILD_ROOT%{_pkglibdir}
 #install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
-
-rm docs/Makefile* docs/*.xml contrib/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
