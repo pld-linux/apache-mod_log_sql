@@ -6,7 +6,7 @@ Summary(pl):	Modu³ logowania zapytañ do Apache do bazy SQL
 Name:		apache-mod_%{mod_name}
 # NOTE: remember about apache1-mod_log_sql when updating!
 Version:	1.99
-Release:	2
+Release:	3
 License:	Apache (?)
 Group:		Networking/Daemons
 Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.gz
@@ -42,6 +42,8 @@ logowanie wszystkich zapytañ do bazy danych.
 %patch0 -p0
 
 %build
+%{__perl} -pi -e "s:apr-config:apr-1-config:g" aclocal.m4
+%{__perl} -pi -e "s:apu-config:apu-1-config:g" aclocal.m4
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
