@@ -36,6 +36,7 @@ logowanie wszystkich zapytañ do bazy danych.
 
 %prep
 %setup -q -n mod_%{mod_name}-%{version}
+%patch0 -p0
 
 %build
 %{__libtoolize}
