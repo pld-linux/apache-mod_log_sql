@@ -11,6 +11,7 @@ License:	Apache (?)
 Group:		Networking/Daemons
 Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.gz
 # Source0-md5:	e246a3d8e96d2d62715eb34f75c7c11d
+Patch0:		mod_%{mod_name}-acam_libexecdir.patch
 URL:		http://www.outoforder.cc/projects/apache/mod_log_sql/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.40
