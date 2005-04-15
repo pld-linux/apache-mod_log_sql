@@ -5,12 +5,12 @@ Summary:	SQL logging module for Apache
 Summary(pl):	Modu³ logowania zapytañ do Apache do bazy SQL
 Name:		apache-mod_%{mod_name}
 # NOTE: remember about apache1-mod_log_sql when updating!
-Version:	1.99
-Release:	4
+Version:	1.100
+Release:	1
 License:	Apache (?)
 Group:		Networking/Daemons
-Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.gz
-# Source0-md5:	e246a3d8e96d2d62715eb34f75c7c11d
+Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.bz2
+# Source0-md5:	b54657ad270cffc34dfab12302c53306
 Patch0:		mod_%{mod_name}-acam_libexecdir.patch
 Patch1:		mod_%{mod_name}-subdirs.patch
 URL:		http://www.outoforder.cc/projects/apache/mod_log_sql/
@@ -25,7 +25,7 @@ BuildRequires:	mysql-devel >= 3.23.30
 Requires(post,preun):	%{apxs}
 Requires(post,preun):	grep
 Requires(preun):	fileutils
-Requires:	apache
+Requires:	apache >= 2.0.40
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
