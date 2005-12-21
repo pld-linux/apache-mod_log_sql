@@ -6,7 +6,7 @@ Summary(pl):	Modu³ logowania zapytañ do Apache do bazy SQL
 Name:		apache-mod_%{mod_name}
 # NOTE: remember about apache1-mod_log_sql when updating!
 Version:	1.100
-Release:	2
+Release:	3
 License:	Apache (?)
 Group:		Networking/Daemons
 Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.bz2
@@ -22,9 +22,8 @@ BuildRequires:	automake
 BuildRequires:	libdbi-devel >= 0.7.0
 BuildRequires:	libtool
 BuildRequires:	mysql-devel >= 3.23.30
-Requires(post,preun):	%{apxs}
-Requires(post,preun):	grep
-Requires(preun):	fileutils
+BuildRequires:	sed >= 4.0
+Requires:	apache(modules-api) = %apache_modules_api
 Requires:	apache >= 2.0.40
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -32,12 +31,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)
 
 %description
-mod_log_sql is a logging module for Apache 1.3 and 2.0 which logs all requests
-to a database.
+mod_log_sql is a logging module for Apache 1.3 and 2.0 which logs all
+requests to a database.
 
 %description -l pl
-mod_log_sql jest modu³em loguj±cym dla Apache 1.3 i 2.0, który pozwala na
-logowanie wszystkich zapytañ do bazy danych.
+mod_log_sql jest modu³em loguj±cym dla Apache 1.3 i 2.0, który pozwala
+na logowanie wszystkich zapytañ do bazy danych.
 
 %prep
 %setup -q -n mod_%{mod_name}-%{version}
@@ -45,10 +44,10 @@ logowanie wszystkich zapytañ do bazy danych.
 %patch1 -p1
 
 rm -f docs/{Makefile*,*.xml} contrib/Makefile*
+sed -i -e "s:apr-config:apr-1-config:g" aclocal.m4
+sed -i -e "s:apu-config:apu-1-config:g" aclocal.m4
 
 %build
-%{__perl} -pi -e "s:apr-config:apr-1-config:g" aclocal.m4
-%{__perl} -pi -e "s:apu-config:apu-1-config:g" aclocal.m4
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
@@ -63,20 +62,21 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_pkglibdir}}
 install .libs/*.so $RPM_BUILD_ROOT%{_pkglibdir}
 #install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
 
+echo 'LoadModule %{mod_name}_module	modules/mod_%{mod_name}.so' > \
+	$RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf/90_mod_%{mod_name}.conf
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-%{apxs} -e -a -n %{mod_name} %{_libexecdir}/mod_%{mod_name}.so 1>&2
-if [ -f /var/lock/subsys/apache ]; then
-	/etc/rc.d/init.d/apache restart 1>&2
+if [ -f /var/lock/subsys/httpd ]; then
+	/etc/rc.d/init.d/httpd restart 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
-	%{apxs} -e -A -n %{mod_name} %{_libexecdir}/mod_%{mod_name}.so 1>&2
-	if [ -f /var/lock/subsys/apache ]; then
-		/etc/rc.d/init.d/apache restart 1>&2
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd restart 1>&2
 	fi
 fi
 
@@ -84,4 +84,4 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS CHANGELOG TODO contrib docs LICENSE
 %attr(755,root,root) %{_pkglibdir}/*
-#%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf/*.conf
