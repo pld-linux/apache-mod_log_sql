@@ -6,7 +6,7 @@ Summary(pl):	Modu³ logowania zapytañ do Apache do bazy SQL
 Name:		apache-mod_%{mod_name}
 # NOTE: remember about apache1-mod_log_sql when updating!
 Version:	1.100
-Release:	3
+Release:	4
 License:	Apache (?)
 Group:		Networking/Daemons
 Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.bz2
@@ -57,7 +57,7 @@ sed -i -e "s:apu-config:apu-1-config:g" aclocal.m4
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_pkglibdir}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/httpd.conf,%{_pkglibdir}}
 
 install .libs/*.so $RPM_BUILD_ROOT%{_pkglibdir}
 #install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
