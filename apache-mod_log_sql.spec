@@ -24,7 +24,6 @@ BuildRequires:	libtool
 BuildRequires:	mysql-devel >= 3.23.30
 BuildRequires:	sed >= 4.0
 Requires:	apache(modules-api) = %apache_modules_api
-Requires:	apache >= 2.0.40
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
@@ -83,5 +82,5 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS CHANGELOG TODO contrib docs LICENSE
-%attr(755,root,root) %{_pkglibdir}/*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf/*.conf
+%attr(755,root,root) %{_pkglibdir}/*.so
