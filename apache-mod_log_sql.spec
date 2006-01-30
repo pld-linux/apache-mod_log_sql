@@ -22,6 +22,7 @@ BuildRequires:	automake
 BuildRequires:	libdbi-devel >= 0.7.0
 BuildRequires:	libtool
 BuildRequires:	mysql-devel >= 3.23.30
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 Requires:	apache(modules-api) = %apache_modules_api
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -68,15 +69,11 @@ echo 'LoadModule %{mod_name}_module	modules/mod_%{mod_name}.so' > \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ -f /var/lock/subsys/httpd ]; then
-	/etc/rc.d/init.d/httpd restart 1>&2
-fi
+%service -q httpd restart
 
 %postun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/httpd ]; then
-		/etc/rc.d/init.d/httpd restart 1>&2
-	fi
+	%service -q httpd restart
 fi
 
 %files
