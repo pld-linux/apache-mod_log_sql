@@ -8,7 +8,7 @@ Name:		apache-mod_%{mod_name}
 Version:	1.101
 Release:	1
 License:	Apache (?)
-Group:		Networking/Daemons
+Group:		Networking/Daemons/HTTP
 Source0:	http://www.outoforder.cc/downloads/mod_log_sql/mod_%{mod_name}-%{version}.tar.bz2
 # Source0-md5:	16157f311eba364d8ee467078e7cc086
 Patch0:		mod_%{mod_name}-acam_libexecdir.patch
